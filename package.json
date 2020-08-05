@@ -1,0 +1,29 @@
+{
+  "name": "@midka/midka-dev-tools",
+  "version": "1.0.0",
+  "description": "A CLI for Midka",
+  "main": "src/index.js",
+  "bin": {
+    "@midka/midka-dev-tools": "bin/midka-dev-tools",
+    "midka-dev-tools": "bin/midka-dev-tools"
+  },
+  "publishConfig": {
+    "access": "restricted"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "cli",
+    "midka-dev-tools"
+  ],
+  "author": "@Midka",
+  "license": "ISC",
+  "dependencies": {
+    "arg": "^4.1.3",
+    "chalk": "^4.1.0",
+    "esm": "^3.2.25",
+    "inquirer": "^7.3.3",
+    "ncp": "^2.0.0"
+  }
+}
