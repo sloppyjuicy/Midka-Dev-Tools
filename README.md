@@ -2,18 +2,22 @@
 
 Dev tools by Midka (AKA me)
 
-# Tietoa
+# How to use
 
-Tämän paketin voi asentaa <code>npm install @midka/midka-dev-tools</code>.
-Tätä pakettia voi käyttää <code>midka-dev-tools -y -g -f --install</code>
+You can install this package with <code>npm install -g @midka/midka-dev-tools</code>.
+<br>
+To generate a project from template, type <code>midka-dev-tools <template> <flags> </code>
 
--y = --yes
---yes = Vastaat kyllä kaikkiin kysymyksiin
+### Flags
 
--g = --git
---git = Tekee sinulle valmiiksi Git repositoryn
+--install or -i Automatically installs dependencies<br>
+--yes or -y Accepts all questions in the prompt<br>
+--git or -g Generates a Git Repository<br>
+--firebase or -f Generates a Firebase configuration (Not tested yet!)<br>
 
--f = --firebase
---firebase = Tekee sinulle valmiiksi Firebase configuraation.
+### Templates
 
---install = Asentaa kaikki depenencyt valmiiksi, muuten joudut tekemään <code>npm install</code> projektin alussa.
+Discordjs: Generates a Discord.js project with basic command and eventHandler. <br>
+React: Generates a basic react application with <code>/src</code> folder cleaned.<br>
+JavaScript: Generates JavaScript app with esm module installed. <br>
+TypeScript: Generates app with TypeScript installed. <br>

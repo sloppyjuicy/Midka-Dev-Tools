@@ -21,7 +21,7 @@ async function initGit(options) {
   });
   if (result.failed) {
     return Promise.reject(
-      new Error("Jokin meni väärin Git repositoryn tekemisessä!")
+      new Error("Something went wrong when creating Git repository!")
     );
   }
   return;
@@ -33,7 +33,7 @@ async function initFirebase(options) {
   });
   if (result.failed) {
     return Promise.reject(
-      new Error("Jokin meni väärin Firebase configuraation hankkimisessa!")
+      new Error("Something went wrong when generating Firebase configuration!")
     );
   }
   return;
@@ -60,40 +60,40 @@ export async function createProject(options) {
     await access(templateDir, fs.constants.R_OK).catch();
   } catch (error) {
     console.error(error);
-    console.error("%s Jokin meni väärin.", chalk.red.bold("ERROR"));
+    console.error("%s Something went wrong!", chalk.red.bold("ERROR"));
     process.exit(1);
   }
 
   const tasks = new Listr([
     {
-      title: "Kopioi mallin tiedostot",
+      title: "Copy template files",
       task: () => copyTemplateFiles(options),
     },
     {
-      title: "Tee Git repository",
+      title: "Make Git repository",
       task: () => initGit(options),
       enabled: (options) => options.git === true,
     },
     {
-      title: "Tee Firebase configuraatio",
+      title: "Generate Firebase configuration",
       task: () => initFirebase(options),
       enabled: (options) => options.firebase === true,
     },
     {
-      title: "Asenna vaatimukset :)",
+      title: "Install Dependencies :)",
       task: () =>
         projectInstall({
           cwd: options.targetDirectory,
         }),
       skip: () =>
         !options.skipPrompts
-          ? "Laita --yes jotta voit automaattisesti asentaa vaatimukset :)"
+          ? "Put --yes to the command to automatically install dependencies :)"
           : undefined,
     },
   ]);
 
   await tasks.run();
 
-  console.log("%s Projekti valmiina", chalk.green.bold("VALMIS"));
+  console.log("%s Project Ready", chalk.green.bold("READY"));
   return true;
 }
