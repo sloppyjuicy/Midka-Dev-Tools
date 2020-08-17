@@ -72,22 +72,22 @@ export async function createProject(options) {
     {
       title: "Make Git repository",
       task: () => initGit(options),
-      enabled: (options) => options.git === true,
+      enabled: () => options.git === true,
     },
     {
       title: "Generate Firebase configuration",
       task: () => initFirebase(options),
-      enabled: (options) => options.firebase === true,
+      enabled: () => options.firebase === true,
     },
     {
       title: "Install Dependencies :)",
       task: () =>
         projectInstall({
-          cwd: options.targetDirectory,
+          prefer: "npm",
         }),
       skip: () =>
-        !options.skipPrompts
-          ? "Put --yes to the command to automatically install dependencies :)"
+        !options.runInstall
+          ? "Put --install to the command to automatically install dependencies :)"
           : undefined,
     },
   ]);
