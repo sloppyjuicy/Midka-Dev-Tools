@@ -1,8 +1,12 @@
 {
-  "name": "@midka/midka-dev-tools",
-  "version": "1.0.2",
+  "name": "midka-dev-tools",
+  "version": "1.0.3",
   "description": "Dev Tools by Midka",
   "main": "index.js",
+  "bin": {
+    "@midka/midka-dev-tools": "bin/midka-dev-tools",
+    "midka-dev-tools": "bin/midka-dev-tools"
+  },
   "dependencies": {
     "arg": "^4.1.3",
     "chalk": "^4.1.0",
@@ -14,13 +18,16 @@
     "pkg-install": "^1.0.0"
   },
   "devDependencies": {},
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
+  "scripts": {},
   "keywords": [
     "cli",
     "dev-tools"
   ],
   "author": "Midka",
-  "license": "MIT"
+  "license": "MIT",
+  "files": [
+    "bin/",
+    "src/",
+    "templates/"
+  ]
 }
