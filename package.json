@@ -18,7 +18,9 @@
     "pkg-install": "^1.0.0"
   },
   "devDependencies": {},
-  "scripts": {},
+  "scripts": {
+    "test": "echo test"
+  },
   "keywords": [
     "cli",
     "dev-tools"
