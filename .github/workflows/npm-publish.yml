@@ -41,7 +41,10 @@ jobs:
         with:
           node-version: 12
           registry-url: https://npm.pkg.github.com/
+          scope: '@kymppi'
       - run: npm ci
-      - run: npm publish
+      - run:
+          npm config set scope "@kymppi"
+          npm publish
         env:
           NODE_AUTH_TOKEN: ${{secrets.ghub_TOKEN}}
