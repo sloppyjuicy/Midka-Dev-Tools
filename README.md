@@ -4,7 +4,7 @@ Dev tools by Midka (AKA me)
 
 # How to use
 
-> You can install this package with ```npm install -g @midka/midka-dev-tools```.<br>
+> You can install this package with ```npm install -g midka-dev-tools```.<br>
 
 > To generate a project from template, type ```midka-dev-tools <template> <flags> ```.<br>
 
