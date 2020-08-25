@@ -41,7 +41,7 @@ async function missingOptionsPrompt(options) {
       type: "list",
       name: "template",
       message: "Please specify template to use.",
-      choices: ["JavaScript", "TypeScript", "ReactJS", "DiscordJs"],
+      choices: ["JavaScript", "TypeScript", "ReactJS", "DiscordJs", "RestAPI"],
       default: defaultTemplate,
     });
   }
