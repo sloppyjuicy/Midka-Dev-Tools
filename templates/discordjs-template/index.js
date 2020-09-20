@@ -98,4 +98,7 @@ fs.readdir("./events/", (err, files) => {
   });
 });
 
+// Showing evtTable
+console.log(evtTable.toString());
+
 client.login(token);
