@@ -1,6 +1,6 @@
 {
   "name": "midka-dev-tools",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "Dev Tools by Midka",
   "main": "index.js",
   "bin": {

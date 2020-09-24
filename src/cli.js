@@ -53,6 +53,14 @@ async function missingOptionsPrompt(options) {
       default: false,
     });
   }
+  if (!options.runInstall) {
+    questions.push({
+      type: "confirm",
+      name: "install",
+      message: "Do you want to install dependencies?",
+      default: false,
+    });
+  }
   if (!options.firebase) {
     questions.push({
       type: "confirm",
@@ -69,6 +77,7 @@ async function missingOptionsPrompt(options) {
     git: options.git || answers.git,
     firebase: options.firebase || answers.firebase,
     targetDirectory: process.cwd(),
+    runInstall: options.runInstall || answers.install,
   };
 }
 

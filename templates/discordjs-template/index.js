@@ -29,15 +29,15 @@ client.on("message", (message) => {
 
   const args = message.content.slice(prefix.length).trim().split(/ +/);
   const commandName = args.shift().toLowerCase();
-  
+
   const command =
     client.commands.get(commandName) ||
     client.commands.find(
       (cmd) => cmd.aliases && cmd.aliases.includes(commandName)
     );
-  
+
   if (!client.commands.has(command.name)) return;
-  
+
   if (!command) return;
 
   if (command.args && !args.length) {
@@ -54,6 +54,13 @@ client.on("message", (message) => {
 
   if (!cooldowns.has(command.name)) {
     cooldowns.set(command.name, new Discord.Collection());
+  }
+
+  if (
+    command.permission &&
+    !message.member.permissions.cache.has(command.permission)
+  ) {
+    return message.reply(`No permission! Required: ${command.permission}`);
   }
 
   const now = Date.now();

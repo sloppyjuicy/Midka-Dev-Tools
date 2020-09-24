@@ -7,6 +7,10 @@ const PORT = process.env.PORT || 5000;
 app.use(express.json);
 
 //Routes
+/* 
+  @route /api
+  @description This is an example route
+*/
 app.use("/api", require("./routes"));
 
 app.listen(PORT, () => {
