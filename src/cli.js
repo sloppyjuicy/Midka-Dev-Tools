@@ -1,5 +1,5 @@
 import arg from "arg";
-import inquirer from "inquirer";
+import Prompter from './Prompt'
 import { createProject } from "./main";
 
 function parseArgumentsIntoOptions(rawArgs) {
@@ -8,9 +8,7 @@ function parseArgumentsIntoOptions(rawArgs) {
       "--git": Boolean,
       "--yes": Boolean,
       "--install": Boolean,
-      "--firebase": Boolean,
       "-g": "--git",
-      "-f": "--firebase",
       "-i": "--install",
       "-y": "--yes",
     },
@@ -23,66 +21,38 @@ function parseArgumentsIntoOptions(rawArgs) {
     git: args["--git"] || false,
     template: args._[0],
     runInstall: args["--install"] || false,
-    firebase: args["--firebase"] || false,
   };
 }
 
 async function missingOptionsPrompt(options) {
-  const defaultTemplate = "JavaScript";
-  if (options.skipPrompts) {
-    return {
-      ...options,
-      template: options.template || defaultTemplate,
-    };
-  }
-  const questions = [];
-  if (!options.template) {
-    questions.push({
-      type: "list",
-      name: "template",
-      message: "Please specify template to use.",
-      choices: ["JavaScript", "TypeScript", "ReactJS", "DiscordJs", "RestAPI"],
-      default: defaultTemplate,
-    });
-  }
-  if (!options.git) {
-    questions.push({
-      type: "confirm",
-      name: "git",
-      message: "Do you want to initialize Git repository?",
-      default: false,
-    });
-  }
-  if (!options.runInstall) {
-    questions.push({
-      type: "confirm",
-      name: "install",
-      message: "Do you want to install dependencies?",
-      default: false,
-    });
-  }
-  if (!options.firebase) {
-    questions.push({
-      type: "confirm",
-      name: "firebase",
-      message: "Do you want to generate Firebase configuration?",
-      default: false,
-    });
+  const prompter = new Prompter()
+  let answers = {};
+  
+  // Prompting for answers
+  Object.assign(answers, await prompter.setup())
+  Object.assign(answers, await prompter.packageManager())
+  console.log(answers.template)
+
+  if (answers.template !== 'typescript') {
+    if(answers.template !== 'javascript') {
+      Object.assign(answers, await prompter.language())
+    }
   }
 
-  const answers = await inquirer.prompt(questions);
-  return {
-    ...options,
-    template: options.template || answers.template,
-    git: options.git || answers.git,
-    firebase: options.firebase || answers.firebase,
-    targetDirectory: process.cwd(),
-    runInstall: options.runInstall || answers.install,
-  };
+  if (answers.languagetsjs === 'typescript') {
+    Object.assign(answers, await prompter.setupTs())
+  }
+
+  if (answers.template === 'discordjs') {
+    Object.assign(answers, await prompter.getCredentials())
+  }
+
+  console.log(answers)
+  
 }
 
 export async function cli(args) {
   let options = parseArgumentsIntoOptions(args);
   options = await missingOptionsPrompt(options);
-  await createProject(options);
+  //await createProject(options);
 }
