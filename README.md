@@ -21,3 +21,4 @@ Dev tools by Midka (AKA me)
 > React: Generates a basic react application with ```/src``` folder cleaned.<br>
 > JavaScript: Generates JavaScript app with esm module installed. <br>
 > TypeScript: Generates app with TypeScript installed. <br>
+> RestAPI: Generates a basic REST API with routes folder. <br>
