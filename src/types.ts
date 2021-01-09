@@ -8,6 +8,7 @@ export interface Answers {
   setup?: boolean;
   git: boolean;
   runInstall: boolean;
+  ownerId?: string;
 }
 
 export interface Args {
@@ -15,5 +16,13 @@ export interface Args {
   git: boolean;
   template: 'discordjs' | 'javascript' | 'typescript' | string | null;
   runInstall: boolean;
+  targetDirectory?: string;
+  templateDir?: string;
   [key: string]: any;
+}
+
+export interface DiscordBotConfig {
+  token: string;
+  prefix: string;
+  ownerId: string;
 }

@@ -1,11 +1,10 @@
 import arg from 'arg';
 import Prompter from './Prompt.js';
-// import { createProject } from "./main";
+import { createProject } from './main';
 import { Answers, Args } from './types';
 import clear from 'clear';
 import figlet from 'figlet';
 import chalk from 'chalk';
-import { truncate } from 'fs';
 
 function parseArgumentsIntoOptions(rawArgs: any) {
   const args = arg(
@@ -24,8 +23,9 @@ function parseArgumentsIntoOptions(rawArgs: any) {
   return {
     skipPrompts: args['--yes'] || false,
     git: args['--git'] || false,
-    template: args._[0],
+    template: null,
     runInstall: args['--install'] || false,
+    targetDirectory: args._[0],
   };
 }
 
@@ -74,9 +74,12 @@ async function missingOptionsPrompt(options: Args) {
     Object.assign(answers, await prompter.setupTs());
   }
 
-  // Getting bot token and prefix
+  // Getting bot token and prefix and ownerId
   if (answers.template === 'discordjs') {
     Object.assign(answers, await prompter.getCredentials());
+
+    // Getting ownerId
+    Object.assign(answers, await prompter.getOwnerId());
   }
 
   return answers;
@@ -90,5 +93,5 @@ export async function cli(args: Args) {
   let options: Args = parseArgumentsIntoOptions(args);
   options = await missingOptionsPrompt(options);
   console.log(options);
-  //await createProject(options);
+  await createProject(options);
 }

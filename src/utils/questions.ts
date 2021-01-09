@@ -93,3 +93,9 @@ export const getInstall: PromptObject = {
   name: 'runInstall',
   message: 'Do you want to install dependencies?',
 };
+
+export const getOwnerId: PromptObject = {
+  type: 'text',
+  name: 'ownerId',
+  message: "Owner's discord id",
+};

@@ -8,6 +8,7 @@ import {
   setupTypescript,
   getGit,
   getInstall,
+  getOwnerId,
 } from './utils/questions';
 
 export default class Prompt {
@@ -49,5 +50,10 @@ export default class Prompt {
   async getInstall() {
     const { runInstall } = await prompts(getInstall);
     return { runInstall };
+  }
+
+  async getOwnerId() {
+    const { ownerId } = await prompts(getOwnerId);
+    return { ownerId };
   }
 }
