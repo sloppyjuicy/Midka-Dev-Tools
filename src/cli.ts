@@ -18,14 +18,17 @@ function parseArgumentsIntoOptions(rawArgs: any) {
     },
     {
       argv: rawArgs.slice(2),
+      permissive: true,
     }
   );
+
+  console.log(args._[0]);
   return {
     skipPrompts: args['--yes'] || false,
     git: args['--git'] || false,
     template: null,
     runInstall: args['--install'] || false,
-    targetDirectory: args._[0],
+    suppliedDirectory: args._[0],
   };
 }
 
@@ -37,6 +40,8 @@ async function missingOptionsPrompt(options: Args) {
     pkgmanager: 'yarn',
     git: true,
     runInstall: true,
+    suppliedDirectory: options.suppliedDirectory,
+    targetDirectory: '',
   };
 
   // Prompting for answers

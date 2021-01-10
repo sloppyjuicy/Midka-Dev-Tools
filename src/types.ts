@@ -9,6 +9,8 @@ export interface Answers {
   git: boolean;
   runInstall: boolean;
   ownerId?: string;
+  suppliedDirectory: string;
+  targetDirectory: string;
 }
 
 export interface Args {

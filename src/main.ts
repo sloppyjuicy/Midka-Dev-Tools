@@ -3,6 +3,7 @@ import fs from 'fs';
 import ncp from 'ncp';
 import { promisify } from 'util';
 import execa from 'execa';
+import path from 'path';
 import Listr from 'listr';
 import { projectInstall } from 'pkg-install';
 import { Args, DiscordBotConfig } from './types';
@@ -29,7 +30,7 @@ async function initGit(options: Args) {
 }
 
 // This is for discordjs template
-async function createConfig(options: Args) {
+function createConfig(options: Args) {
   let config: DiscordBotConfig = {
     token: options.token,
     prefix: options.prefix,
@@ -38,13 +39,22 @@ async function createConfig(options: Args) {
 
   let data = JSON.stringify(config, null, 2);
 
-  fs.writeFileSync('config.json', data);
+  fs.writeFileSync(options.targetDirectory + 'config.json', data);
+}
+
+// Checking if directory exist and creating new if doesn't
+function dirCheck(options: Args) {
+  if (!fs.existsSync(options.targetDirectory!)) {
+    fs.mkdirSync(options.targetDirectory!);
+  }
 }
 
 export async function createProject(options: Args) {
+  console.log(options);
+
   options = {
     ...options,
-    targetDirectory: options.targetDirectory || process.cwd(),
+    targetDirectory: path.join(__dirname, options.suppliedDirectory, '/'),
   };
 
   const templateDir = __dirname
@@ -68,6 +78,10 @@ export async function createProject(options: Args) {
   }
 
   const tasks = new Listr([
+    {
+      title: 'Checking if directory exist',
+      task: () => dirCheck(options),
+    },
     {
       title: 'Copy template files',
       task: () => copyTemplateFiles(options),
