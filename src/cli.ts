@@ -5,6 +5,7 @@ import { Answers, Args } from './types';
 import clear from 'clear';
 import figlet from 'figlet';
 import chalk from 'chalk';
+import path from 'path';
 
 function parseArgumentsIntoOptions(rawArgs: any) {
   const args = arg(
@@ -35,16 +36,19 @@ function parseArgumentsIntoOptions(rawArgs: any) {
 async function missingOptionsPrompt(options: Args) {
   const prompter = new Prompter();
   let answers: Answers = {
-    template: null,
+    template: 'javascript',
     name: '',
     pkgmanager: 'yarn',
+    language: 'javascript',
+    setup: false,
     git: true,
     runInstall: true,
-    suppliedDirectory: options.suppliedDirectory,
-    targetDirectory: '',
+    targetDirectory: path.resolve(process.cwd(), options.suppliedDirectory),
   };
 
   // Prompting for answers
+
+  console.log(answers.targetDirectory);
 
   // Getting project's name
   Object.assign(answers, await prompter.getName());
@@ -62,10 +66,10 @@ async function missingOptionsPrompt(options: Args) {
   // If not install argument passed then asking for it
   if (!options.runInstall) {
     Object.assign(answers, await prompter.getInstall());
-  }
 
-  // Gettings preferred package manager to install packages
-  Object.assign(answers, await prompter.packageManager());
+    // Gettings preferred package manager to install packages
+    Object.assign(answers, await prompter.packageManager());
+  }
 
   // Getting language for discord bot
   if (answers.template !== 'typescript') {
