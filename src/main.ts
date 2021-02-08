@@ -50,8 +50,6 @@ function dirCheck(options: Args) {
 }
 
 export async function createProject(options: Args) {
-  console.log(options);
-
   const templateDir = __dirname
     .toString()
     .replace(
@@ -72,6 +70,13 @@ export async function createProject(options: Args) {
     process.exit(1);
   }
 
+  await runTasks(options);
+
+  console.log('%s Project Ready', chalk.green.bold('READY'));
+  return true;
+}
+
+async function runTasks(options: Args) {
   const tasks = new Listr([
     {
       title: 'Checking if directory exist',
@@ -105,7 +110,4 @@ export async function createProject(options: Args) {
   ]);
 
   await tasks.run();
-
-  console.log('%s Project Ready', chalk.green.bold('READY'));
-  return true;
 }
