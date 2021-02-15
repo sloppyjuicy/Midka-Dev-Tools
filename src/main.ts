@@ -12,7 +12,7 @@ const access = promisify(fs.access);
 const copy = promisify(ncp);
 
 async function copyTemplateFiles(options: Args) {
-  return copy(options.templateDir!, options.targetDirectory!, {
+  return copy(options.templateDir, options.targetDirectory, {
     clobber: false,
   });
 }
@@ -39,24 +39,17 @@ function createConfig(options: Args) {
 
   let data = JSON.stringify(config, null, 2);
 
-  fs.writeFileSync(options.targetDirectory + 'config.json', data);
+  fs.writeFileSync(options.targetDirectory + '/config.json', data);
 }
 
 // Checking if directory exist and creating new if doesn't
 function dirCheck(options: Args) {
-  if (!fs.existsSync(options.targetDirectory!)) {
-    fs.mkdirSync(options.targetDirectory!);
+  if (!fs.existsSync(options.targetDirectory)) {
+    fs.mkdirSync(options.targetDirectory);
   }
 }
 
 export async function createProject(options: Args) {
-  console.log(options);
-
-  options = {
-    ...options,
-    targetDirectory: path.join(__dirname, options.suppliedDirectory, '/'),
-  };
-
   const templateDir = __dirname
     .toString()
     .replace(
@@ -77,6 +70,13 @@ export async function createProject(options: Args) {
     process.exit(1);
   }
 
+  await runTasks(options);
+
+  console.log('%s Project Ready', chalk.green.bold('READY'));
+  return true;
+}
+
+async function runTasks(options: Args) {
   const tasks = new Listr([
     {
       title: 'Checking if directory exist',
@@ -110,7 +110,4 @@ export async function createProject(options: Args) {
   ]);
 
   await tasks.run();
-
-  console.log('%s Project Ready', chalk.green.bold('READY'));
-  return true;
 }

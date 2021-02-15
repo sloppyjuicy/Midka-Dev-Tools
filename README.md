@@ -1,26 +1,9 @@
 # Midka-Dev-Tools
 
 Dev tools by Midka (AKA me)
+[![Maintainability](https://api.codeclimate.com/v1/badges/8468cf9c16e6b72f4dbd/maintainability)](https://codeclimate.com/github/kymppi/Midka-Dev-Tools/maintainability)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/8468cf9c16e6b72f4dbd/test_coverage)](https://codeclimate.com/github/kymppi/Midka-Dev-Tools/test_coverage)
+[![MIT Licensed](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](https://github.com/your/your-project/blob/master/LICENSE)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
 
-# How to use
-
-> You can install this package with `npm install -g midka-dev-tools`.<br>
-
-> To generate a project from template, type `midka-dev-tools <template> <flags> `.<br>
-
-### Flags
-
-> --install or -i Automatically installs dependencies<br>
-> --yes or -y Accepts all questions in the prompt<br>
-> --git or -g Generates a Git Repository<br>
-> --firebase or -f Generates a Firebase configuration (Not tested yet!)<br>
-
-### Templates
-
-> Discordjs: Generates a Discord.js project with basic command and eventHandler. <br>
-> React: Generates a basic react application with `/src` folder cleaned.<br>
-> JavaScript: Generates JavaScript app with esm module installed. <br>
-> TypeScript: Generates app with TypeScript installed. <br>
-> RestAPI: Generates a basic REST API with routes folder. <br>
-
-# testing GPG
+# Very heavily under development

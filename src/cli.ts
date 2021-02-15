@@ -5,6 +5,7 @@ import { Answers, Args } from './types';
 import clear from 'clear';
 import figlet from 'figlet';
 import chalk from 'chalk';
+import path from 'path';
 
 function parseArgumentsIntoOptions(rawArgs: any) {
   const args = arg(
@@ -35,56 +36,63 @@ function parseArgumentsIntoOptions(rawArgs: any) {
 async function missingOptionsPrompt(options: Args) {
   const prompter = new Prompter();
   let answers: Answers = {
-    template: null,
+    template: 'javascript',
     name: '',
     pkgmanager: 'yarn',
+    language: 'javascript',
+    setup: false,
     git: true,
     runInstall: true,
-    suppliedDirectory: options.suppliedDirectory,
-    targetDirectory: '',
+    targetDirectory: path.resolve(process.cwd(), options.suppliedDirectory),
   };
 
   // Prompting for answers
 
+  console.log(answers.targetDirectory);
+
   // Getting project's name
-  Object.assign(answers, await prompter.getName());
+  addToAnswers(await prompter.getName());
 
   // If not template supplied then asking for it
   if (!options.template) {
-    Object.assign(answers, await prompter.getTemplate());
+    addToAnswers(await prompter.getTemplate());
   }
 
   // If not git argument passed then asking for it
   if (!options.git) {
-    Object.assign(answers, await prompter.getGit());
+    addToAnswers(await prompter.getGit());
   }
 
   // If not install argument passed then asking for it
   if (!options.runInstall) {
-    Object.assign(answers, await prompter.getInstall());
-  }
+    addToAnswers(await prompter.getInstall());
 
-  // Gettings preferred package manager to install packages
-  Object.assign(answers, await prompter.packageManager());
+    // Gettings preferred package manager to install packages
+    addToAnswers(await prompter.packageManager());
+  }
 
   // Getting language for discord bot
   if (answers.template !== 'typescript') {
     if (answers.template !== 'javascript') {
-      Object.assign(answers, await prompter.language());
+      addToAnswers(await prompter.language());
     }
   }
 
   // Asking should i setup typescript
   if (answers.language === 'typescript' || answers.template === 'typescript') {
-    Object.assign(answers, await prompter.setupTs());
+    addToAnswers(await prompter.setupTs());
   }
 
   // Getting bot token and prefix and ownerId
   if (answers.template === 'discordjs') {
-    Object.assign(answers, await prompter.getCredentials());
+    addToAnswers(await prompter.getCredentials());
 
     // Getting ownerId
-    Object.assign(answers, await prompter.getOwnerId());
+    addToAnswers(await prompter.getOwnerId());
+  }
+
+  function addToAnswers(answer: any) {
+    Object.assign(answers, answer);
   }
 
   return answers;
