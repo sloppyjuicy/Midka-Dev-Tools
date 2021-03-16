@@ -26,23 +26,6 @@ export const languageSelect: PromptObject = {
   ],
 };
 
-export const getCredentials: PromptObject[] = [
-  {
-    type: 'password',
-    name: 'token',
-    message: 'Enter your token',
-    validate: (value: string) =>
-      value.length === 0 ? 'Cannot be empty' : true,
-  },
-  {
-    type: 'text',
-    name: 'prefix',
-    message: 'Enter your prefix',
-    validate: (value: string) =>
-      value.length === 0 ? 'Cannot be empty' : true,
-  },
-];
-
 export const setupTypescript: PromptObject = {
   type: 'confirm',
   name: 'setupTs',
@@ -92,10 +75,4 @@ export const getInstall: PromptObject = {
   type: 'confirm',
   name: 'runInstall',
   message: 'Do you want to install dependencies?',
-};
-
-export const getOwnerId: PromptObject = {
-  type: 'text',
-  name: 'ownerId',
-  message: "Owner's discord id",
 };

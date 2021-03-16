@@ -1,4 +1,4 @@
-import arg from 'arg';
+//import arg from 'arg';
 import Prompter from './Prompt.js';
 import { createProject } from './main';
 import { Answers, Args } from './types';
@@ -6,32 +6,33 @@ import clear from 'clear';
 import figlet from 'figlet';
 import chalk from 'chalk';
 import path from 'path';
+import { parseArgs } from './functions';
 
-function parseArgumentsIntoOptions(rawArgs: any) {
-  const args = arg(
-    {
-      '--git': Boolean,
-      '--yes': Boolean,
-      '--install': Boolean,
-      '-g': '--git',
-      '-i': '--install',
-      '-y': '--yes',
-    },
-    {
-      argv: rawArgs.slice(2),
-      permissive: true,
-    }
-  );
+// function parseArgs(rawArgs: any) {
+//   const args = arg(
+//     {
+//       '--git': Boolean,
+//       '--yes': Boolean,
+//       '--install': Boolean,
+//       '-g': '--git',
+//       '-i': '--install',
+//       '-y': '--yes',
+//     },
+//     {
+//       argv: rawArgs.slice(2),
+//       permissive: true,
+//     }
+//   );
 
-  console.log(args._[0]);
-  return {
-    skipPrompts: args['--yes'] || false,
-    git: args['--git'] || false,
-    template: null,
-    runInstall: args['--install'] || false,
-    suppliedDirectory: args._[0],
-  };
-}
+//   console.log(args._[0]);
+//   return {
+//     skipPrompts: args['--yes'] || false,
+//     git: args['--git'] || false,
+//     template: null,
+//     runInstall: args['--install'] || false,
+//     suppliedDirectory: args._[0],
+//   };
+// }
 
 async function missingOptionsPrompt(options: Args) {
   const prompter = new Prompter();
@@ -103,8 +104,8 @@ export async function cli(args: Args) {
   console.log(
     chalk.red(figlet.textSync("Midka's tools", { horizontalLayout: 'full' }))
   );
-  let options: Args = parseArgumentsIntoOptions(args);
-  options = await missingOptionsPrompt(options);
+  let options: Args = parseArgs(args);
+  //options = await missingOptionsPrompt(options);
   console.log(options);
-  await createProject(options);
+  //await createProject(options);
 }
