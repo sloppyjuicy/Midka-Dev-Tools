@@ -1,0 +1,3 @@
+[submodule "midka-dev-tools-templates"]
+	path = midka-dev-tools-templates
+	url = ./midka-dev-tools-templates
