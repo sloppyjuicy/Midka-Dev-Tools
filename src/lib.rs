@@ -1,4 +1,11 @@
-use dialoguer::{console::Term, theme::ColorfulTheme, Confirm, Select};
+mod prompt;
+use std::process::Command;
+
+use tempfile::tempdir;
+use tempfile::TempDir;
+
+use crate::prompt::prompt_confirm;
+use crate::prompt::prompt_select;
 
 /*
     Config file in template directory
@@ -26,6 +33,9 @@ use dialoguer::{console::Term, theme::ColorfulTheme, Confirm, Select};
 */
 
 pub fn run() {
+    let templates = clone_github_repo("https://github.com/kymppi/midka-dev-tools-templates.git");
+    println!("templates: {:?}", templates);
+
     let templates = vec!["Blank", "NextJS"]; //TODO: read from file in a github repo
     let languages = vec!["Rust", "JavaScript", "TypeScript"]; //TODO: read from file in a github repo
 
@@ -34,54 +44,20 @@ pub fn run() {
 
     let init_git = prompt_confirm("Initialize git");
 
-    print!("{}:{}:{}", template, language, init_git);
+    println!("answers: {}:{}:{}", template, language, init_git);
 }
 
-fn prompt_confirm(question: &str) -> bool {
-    let selection = Confirm::with_theme(&ColorfulTheme::default())
-        .with_prompt(question)
-        .interact_on_opt(&Term::stderr());
+fn clone_github_repo(repo: &str) -> TempDir {
+    let dir = tempdir().unwrap();
 
-    match selection {
-        Ok(selection) => return handle_select_bool(selection),
-        Err(err) => {
-            println!("Error: could not get selection, err: {}", err);
-            false
-        }
-    };
+    // run the git clone command
+    Command::new("git")
+        .arg("clone")
+        .arg(repo)
+        .arg(".")
+        .current_dir(&dir)
+        .output()
+        .expect("*Unpacking objects*");
 
-    false
-}
-
-fn prompt_select<'a>(question: &'a str, options: Vec<&'a str>) -> &'a str {
-    let selection = Select::with_theme(&ColorfulTheme::default())
-        .with_prompt(question)
-        .items(&options)
-        .default(0)
-        .interact_on_opt(&Term::stderr());
-
-    match selection {
-        Ok(item) => handle_select(item, options),
-        Err(error) => {
-            println!("Error: {}", error);
-            "Error"
-        }
-    }
-}
-
-fn handle_select<'a>(selection: Option<usize>, items: Vec<&'a str>) -> &'a str {
-    match selection {
-        Some(index) => items[index],
-        None => "Selection cancelled",
-    }
-}
-
-fn handle_select_bool(selection: Option<bool>) -> bool {
-    match selection {
-        Some(index) => index,
-        None => {
-            "Selection cancelled";
-            false
-        }
-    }
+    dir
 }
