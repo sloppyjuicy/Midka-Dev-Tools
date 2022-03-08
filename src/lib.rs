@@ -1,4 +1,8 @@
+mod config;
 mod prompt;
+use crate::config::get_main_config;
+use crate::config::get_template_config;
+use std::path::Path;
 use std::process::Command;
 
 use tempfile::tempdir;
@@ -33,8 +37,11 @@ use crate::prompt::prompt_select;
 */
 
 pub fn run() {
-    let templates = clone_github_repo("https://github.com/kymppi/midka-dev-tools-templates.git");
-    println!("templates: {:?}", templates);
+    let template_dir = clone_github_repo("https://github.com/kymppi/midka-dev-tools-templates.git");
+
+    let main_config = get_main_config(&template_dir.path().to_string_lossy().to_string());
+
+    println!("{:?}", main_config.templates);
 
     let templates = vec!["Blank", "NextJS"]; //TODO: read from file in a github repo
     let languages = vec!["Rust", "JavaScript", "TypeScript"]; //TODO: read from file in a github repo
@@ -45,19 +52,29 @@ pub fn run() {
     let init_git = prompt_confirm("Initialize git");
 
     println!("answers: {}:{}:{}", template, language, init_git);
+
+    let blank_config = get_template_config(
+        &(template_dir.path().to_string_lossy().to_string() + "/blank/config.toml"),
+    );
+    println!("blank_config: {:?}", blank_config);
+
+    template_dir.close().unwrap();
 }
 
 fn clone_github_repo(repo: &str) -> TempDir {
     let dir = tempdir().unwrap();
 
     // run the git clone command
+    //let status =
     Command::new("git")
         .arg("clone")
         .arg(repo)
         .arg(".")
         .current_dir(&dir)
         .output()
-        .expect("*Unpacking objects*");
+        .expect("Something went wrong with git clone");
+
+    //println!("{:?}", status);
 
     dir
 }
