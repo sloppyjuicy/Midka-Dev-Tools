@@ -16,7 +16,7 @@ pub fn prompt_confirm(question: &str) -> bool {
     false
 }
 
-pub fn prompt_select<'a>(question: &'a str, options: Vec<&'a str>) -> &'a str {
+pub fn prompt_select<'a>(question: &'a str, options: Vec<String>) -> String {
     let selection = Select::with_theme(&ColorfulTheme::default())
         .with_prompt(question)
         .items(&options)
@@ -27,15 +27,15 @@ pub fn prompt_select<'a>(question: &'a str, options: Vec<&'a str>) -> &'a str {
         Ok(item) => handle_select(item, options),
         Err(error) => {
             println!("Error: {}", error);
-            "Error"
+            "Error".to_string()
         }
     }
 }
 
-fn handle_select<'a>(selection: Option<usize>, items: Vec<&'a str>) -> &'a str {
+fn handle_select(selection: Option<usize>, items: Vec<String>) -> String {
     match selection {
-        Some(index) => items[index],
-        None => "Selection cancelled",
+        Some(index) => items[index].clone(),
+        None => "Selection cancelled".to_string(),
     }
 }
 
