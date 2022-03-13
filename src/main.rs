@@ -4,7 +4,7 @@ mod config;
 mod prompt;
 mod utils;
 
-use std::collections::HashMap;
+use std::{collections::HashMap, fs::create_dir, path::PathBuf};
 
 use clap::Parser;
 use colored::Colorize;
@@ -25,8 +25,6 @@ fn main() {
     let interactive = true;
     let args = CLI::parse();
 
-    println!("{:?}", args);
-
     if interactive {
         run_interactive(args);
     } else {
@@ -38,7 +36,37 @@ fn run_interactive(args: CLI) {
     // Create temp directory
     let template_dir = clone_github_repo("https://github.com/kymppi/midka-dev-tools-templates.git");
 
-    //TODO check if the args.path directory is empty or create it if it doesn't exist
+    //Check if path is directory and it exists
+    let path_exists = args.path.is_dir();
+
+    if !path_exists {
+        let result = create_dir(&args.path);
+
+        match result {
+            Ok(_) => {
+                println!("{} {}", "Directory created: ".green(), args.path.display());
+            }
+            Err(e) => {
+                println!("{}", e.to_string().red());
+            }
+        }
+    }
+
+    // Check that directory is empty
+    let is_empty = PathBuf::from(&args.path)
+        .read_dir()
+        .map(|mut i| i.next().is_none())
+        .unwrap_or(false);
+
+    if !is_empty {
+        println!(
+            "{} {} {}",
+            "Directory".red(),
+            args.path.display(),
+            "is not empty.".red()
+        );
+        return;
+    }
 
     // Get main config
     let main_config = get_main_config(&template_dir.path().to_string_lossy().to_string()).unwrap();
