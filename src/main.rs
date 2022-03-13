@@ -12,7 +12,7 @@ use colored::Colorize;
 use crate::{
     config::{get_main_config, get_template_config},
     prompt::{prompt_confirm, prompt_select},
-    utils::{clone_github_repo, run_command},
+    utils::{clone_github_repo, copy_dir_all, run_command, run_commands_from_config},
 };
 
 #[derive(Parser, Debug)]
@@ -104,40 +104,50 @@ fn run_interactive(args: CLI) {
     }
 
     //TODO Copy files
+    let source = template_dir
+        .path()
+        .join(&template.to_lowercase())
+        .join(&language.to_lowercase());
+    let result = copy_dir_all(&source, &args.path);
+
+    match result {
+        Ok(_) => println!("{}", "Files copied".green()),
+        Err(e) => println!("{}", e.to_string().red()),
+    }
 
     // Running init & install commands
     println!("{}", "Starting project initialization...".cyan());
 
     let mut status: HashMap<String, bool> = HashMap::new();
 
-    let command = config.init_commands[&language.to_lowercase()]
-        .as_str()
-        .unwrap_or("");
-
-    let init_result = run_command(&command, Some(args.path.clone()));
-    let install_result = run_command(
-        &config.install_commands[&language.to_lowercase()]
-            .as_str()
-            .unwrap_or(""),
-        Some(args.path.clone()),
+    // Run init commands
+    run_commands_from_config(
+        &config.init_commands,
+        "init",
+        &language,
+        &args.path,
+        &mut status,
     );
 
-    match init_result {
-        Ok(_) => status.insert("init".to_string(), true),
-        Err(e) => {
-            println!("{}", e.to_string().red());
-            status.insert("init".to_string(), false);
-            return;
-        }
-    };
+    // Run install commands
+    run_commands_from_config(
+        &config.install_commands,
+        "install",
+        &language,
+        &args.path,
+        &mut status,
+    );
 
-    match install_result {
-        Ok(_) => status.insert("install".to_string(), true),
-        Err(e) => {
-            println!("{}", e.to_string().red());
-            status.insert("install".to_string(), false);
-            return;
-        }
+    if *status.get("init").unwrap() {
+        println!("{}", "Init command was successful".green());
+    } else {
+        println!("{}", "Init command failed".red());
+    }
+
+    if *status.get("install").unwrap() {
+        println!("{}", "Install command was successful".green());
+    } else {
+        println!("{}", "Install command failed".red());
     };
 
     // Remove temp dir
