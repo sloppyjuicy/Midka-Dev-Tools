@@ -1,1 +1,0 @@
-console.log('Midka ei osaa käyttää typescriptiä!')
