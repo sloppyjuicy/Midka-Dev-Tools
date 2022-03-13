@@ -6,4 +6,6 @@ Dev tools by Midka (AKA me)
 [![MIT Licensed](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](https://github.com/your/your-project/blob/master/LICENSE)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
 
-# Very heavily under development especially when rewriting in rust
+# How to add new templates?
+
+All of the template are in [this repo](https://github.com/kymppi/midka-dev-tools-templates) and are automatically loaded when the tool is used.
