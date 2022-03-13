@@ -103,7 +103,7 @@ fn run_interactive(args: CLI) {
         }
     }
 
-    //TODO Copy files
+    //Copy files
     let source = template_dir
         .path()
         .join(&template.to_lowercase())
