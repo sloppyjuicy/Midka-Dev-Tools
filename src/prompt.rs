@@ -1,4 +1,4 @@
-use dialoguer::{console::Term, theme::ColorfulTheme, Confirm, Select};
+use dialoguer::{console::Term, theme::ColorfulTheme, Confirm, Select, Input};
 
 pub fn prompt_confirm(question: &str) -> bool {
     let selection = Confirm::with_theme(&ColorfulTheme::default())
@@ -25,6 +25,20 @@ pub fn prompt_select<'a>(question: &'a str, options: Vec<String>) -> String {
 
     match selection {
         Ok(item) => handle_select(item, options),
+        Err(error) => {
+            println!("Error: {}", error);
+            "Error".to_string()
+        }
+    }
+}
+
+pub fn prompt_input<'a>(question: &'a str) -> String {
+    let selection = Input::<String>::with_theme(&ColorfulTheme::default())
+        .with_prompt(question)
+        .interact_text();
+
+    match selection {
+        Ok(item) => item,
         Err(error) => {
             println!("Error: {}", error);
             "Error".to_string()

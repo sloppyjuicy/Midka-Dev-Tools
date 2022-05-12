@@ -11,6 +11,7 @@ pub struct TemplateConfig {
     pub name: String,
     pub description: String,
     pub language: Vec<String>,
+    pub args: Option<Vec<Table>>,
     pub init_commands: Table,
     pub install_commands: Table,
 }

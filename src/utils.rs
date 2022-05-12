@@ -53,13 +53,22 @@ pub fn run_command(command: &str, path: Option<std::path::PathBuf>) -> Result<()
     Ok(())
 }
 
-pub fn get_command<'a>(table: &'a Table, key: &'a str) -> &'a str {
+pub fn get_command<'a>(table: &'a Table, key: &'a str, arg_map: HashMap<String, String>) -> String {
     let command_value = table.get(&key.to_lowercase());
 
-    let command = match command_value {
-        Some(value) => value.as_str().unwrap_or(""),
-        None => "",
+    let mut command = match command_value {
+        Some(value) => value.as_str().unwrap_or("").to_string(),
+        None => "".to_string(),
     };
+
+    for arg in arg_map.keys() {
+        let arg = arg.to_string();
+        let arg_value = match arg_map.get(&arg) {
+            None => "Error",
+            Some(x) => x.as_str(),
+        };
+        command = command.replace(&format!("${arg}"), arg_value);
+    }
 
     command
 }
@@ -70,8 +79,9 @@ pub fn run_commands_from_config(
     language: &str,
     path: &PathBuf,
     status: &mut HashMap<String, bool>,
+    arg_map: HashMap<String, String>
 ) {
-    let install_result = run_command(get_command(&table, &language), Some(path.clone()));
+    let install_result = run_command(&get_command(&table, &language, arg_map), Some(path.clone()));
 
     match install_result {
         Ok(_) => status.insert(r#type.to_string(), true),
