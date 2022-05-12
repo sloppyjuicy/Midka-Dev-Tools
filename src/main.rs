@@ -16,14 +16,14 @@ use crate::{
 };
 
 #[derive(Parser, Debug)]
-struct CLI {
+struct Cli {
     #[clap(parse(from_os_str), default_value = ".")]
     path: std::path::PathBuf,
 }
 
 fn main() {
     let interactive = true;
-    let args = CLI::parse();
+    let args = Cli::parse();
 
     if interactive {
         run_interactive(args);
@@ -32,7 +32,7 @@ fn main() {
     }
 }
 
-fn run_interactive(args: CLI) {
+fn run_interactive(args: Cli) {
     // Create temp directory
     let template_dir = clone_github_repo("https://github.com/kymppi/midka-dev-tools-templates.git");
 
@@ -75,7 +75,7 @@ fn run_interactive(args: CLI) {
     let templates = main_config.templates;
     let template = prompt_select("Select a template", templates);
     let template_config = get_template_config(
-        &template_dir
+        template_dir
             .path()
             .join(&template.to_lowercase())
             .join("config.toml")
@@ -107,10 +107,10 @@ fn run_interactive(args: CLI) {
                 Some(x) => x.as_str().unwrap(),
             };
             
-            let question: &str = &format!("{name} (example: {example})");
+            let question = format!("{name} (example: {example})");
             arg_map.insert(
                 id.to_string(),
-                prompt_input(question)
+                prompt_input(&question)
             );
         }
 

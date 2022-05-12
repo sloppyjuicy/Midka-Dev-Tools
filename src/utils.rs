@@ -1,7 +1,7 @@
 use std::collections::HashMap;
 use std::fs;
 use std::io;
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 use std::process::Command;
 
 use colored::Colorize;
@@ -32,7 +32,7 @@ pub fn run_command(command: &str, path: Option<std::path::PathBuf>) -> Result<()
         return Ok(());
     }
 
-    let path = path.unwrap_or(".".into());
+    let path = path.unwrap_or_else(|| ".".into());
 
     let result = Command::new("sh")
         .arg("-c")
@@ -77,18 +77,17 @@ pub fn run_commands_from_config(
     table: &Table,
     r#type: &str,
     language: &str,
-    path: &PathBuf,
+    path: &Path,
     status: &mut HashMap<String, bool>,
     arg_map: HashMap<String, String>
 ) {
-    let install_result = run_command(&get_command(&table, &language, arg_map), Some(path.clone()));
+    let install_result = run_command(&get_command(table, language, arg_map), Some(path.to_path_buf()));
 
     match install_result {
         Ok(_) => status.insert(r#type.to_string(), true),
         Err(e) => {
             println!("{}", e.to_string().red());
-            status.insert(r#type.to_string(), false);
-            return;
+            status.insert(r#type.to_string(), false)
         }
     };
 }
