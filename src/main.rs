@@ -34,7 +34,7 @@ fn main() {
 
 fn run_interactive(args: CLI) {
     // Create temp directory
-    let template_dir = clone_github_repo("https://github.com/raikasdev/midka-dev-tools-templates.git");
+    let template_dir = clone_github_repo("https://github.com/kymppi/midka-dev-tools-templates.git");
 
     //Check if path is directory and it exists
     let path_exists = args.path.is_dir();
