@@ -1,4 +1,4 @@
-use dialoguer::{console::Term, theme::ColorfulTheme, Confirm, Select};
+use dialoguer::{console::Term, theme::ColorfulTheme, Confirm, Select, Input};
 
 pub fn prompt_confirm(question: &str) -> bool {
     let selection = Confirm::with_theme(&ColorfulTheme::default())
@@ -16,7 +16,7 @@ pub fn prompt_confirm(question: &str) -> bool {
     false
 }
 
-pub fn prompt_select<'a>(question: &'a str, options: Vec<String>) -> String {
+pub fn prompt_select(question: &str, options: Vec<String>) -> String {
     let selection = Select::with_theme(&ColorfulTheme::default())
         .with_prompt(question)
         .items(&options)
@@ -32,6 +32,20 @@ pub fn prompt_select<'a>(question: &'a str, options: Vec<String>) -> String {
     }
 }
 
+pub fn prompt_input(question: &str) -> String {
+    let selection = Input::<String>::with_theme(&ColorfulTheme::default())
+        .with_prompt(question)
+        .interact_text();
+
+    match selection {
+        Ok(item) => item,
+        Err(error) => {
+            println!("Error: {}", error);
+            "Error".to_string()
+        }
+    }
+}
+
 fn handle_select(selection: Option<usize>, items: Vec<String>) -> String {
     match selection {
         Some(index) => items[index].clone(),
@@ -40,11 +54,5 @@ fn handle_select(selection: Option<usize>, items: Vec<String>) -> String {
 }
 
 fn handle_select_bool(selection: Option<bool>) -> bool {
-    match selection {
-        Some(index) => index,
-        None => {
-            "Selection cancelled";
-            false
-        }
-    }
+    selection.unwrap_or(false)
 }
