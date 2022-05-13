@@ -82,12 +82,15 @@ fn run_interactive(args: Cli) {
             .to_str()
             .unwrap(),
     );
-
+    
     let Ok(config) = template_config else {
         return println!("{}", "Error: invalid template".red());
     };
 
-    let language = prompt_select("Select a language", config.language);
+    let language = match config.language.len() {
+        1 => config.language.get(0).unwrap().to_string(),
+        _ => prompt_select("Select a language", config.language),
+    };
     
     let mut arg_map: HashMap<String, String> = HashMap::new();
 
